@@ -3,7 +3,6 @@ import 'package:cha_casa_nova/add_produto.dart';
 import 'package:cha_casa_nova/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'dart:js' as js;
 
 class MyHomePage extends StatefulWidget {
@@ -53,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.person),
+                icon: const Icon(Icons.person),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

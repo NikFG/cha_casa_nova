@@ -37,7 +37,7 @@ class _AddProdutoState extends State<AddProduto> {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.person),
+                icon: const Icon(Icons.person),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -77,7 +77,7 @@ class _AddProdutoState extends State<AddProduto> {
                   return null;
                 },
                 controller: _precoController,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),
                 ],
