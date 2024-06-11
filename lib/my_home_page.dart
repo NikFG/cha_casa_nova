@@ -16,18 +16,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   FirebaseFirestore db = FirebaseFirestore.instance;
-  static const PRODUTOS = "produtos";
   List<Produto> produtos = [];
 
   @override
   void initState() {
     refresh();
-    db
-        .collection(PRODUTOS)
-        .orderBy('comprado')
-        .orderBy('preco', descending: true)
-        .snapshots()
-        .listen((event) {
+    queryProdutos().snapshots().listen((event) {
       produtos = [];
       setState(() {
         for (QueryDocumentSnapshot doc in event.docs) {
@@ -88,15 +82,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void refresh() async {
-    QuerySnapshot query = await db
-        .collection(PRODUTOS)
-        .orderBy('comprado')
-        .orderBy('preco', descending: true)
-        .get();
+    QuerySnapshot query = await queryProdutos().get();
     setState(() {
       produtos = query.docs.map((doc) {
         return Produto.fromJson(doc);
       }).toList();
     });
+  }
+
+  Query<Map<String, dynamic>> queryProdutos() {
+    return db
+        .collection("produtos")
+        .orderBy('comprado')
+        .orderBy('preco', descending: true);
   }
 }
