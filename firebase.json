@@ -1,0 +1,25 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "cha-casa-nova-5e05d",
+          "appId": "1:288319570838:android:af16d537747397426513b7",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "cha-casa-nova-5e05d",
+          "configurations": {
+            "android": "1:288319570838:android:af16d537747397426513b7",
+            "ios": "1:288319570838:ios:23585ab0248c96d86513b7",
+            "macos": "1:288319570838:ios:23585ab0248c96d86513b7",
+            "web": "1:288319570838:web:53d091ce67faaf066513b7",
+            "windows": "1:288319570838:web:21e0fb767ec4c4ca6513b7"
+          }
+        }
+      }
+    }
+  }
+}

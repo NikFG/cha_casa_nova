@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "288319570838",
+    "project_id": "cha-casa-nova-5e05d",
+    "storage_bucket": "cha-casa-nova-5e05d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288319570838:android:af16d537747397426513b7",
+        "android_client_info": {
+          "package_name": "com.niksoft.cha_casa_nova"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrXueyK-gE5lbr3SjCblY5Iq7k-7Mt6iU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
