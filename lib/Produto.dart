@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Produto {
-  late String id;
+  late String id; 
   late String nome;
   late double preco;
   late bool comprado;
