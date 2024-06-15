@@ -1,10 +1,13 @@
+import "dart:io";
+import 'dart:js' as js;
+
 import 'package:cha_casa_nova/Produto.dart';
-import 'package:cha_casa_nova/add_produto.dart';
+import "package:cha_casa_nova/home_page_mobile.dart";
+import "package:cha_casa_nova/home_page_pc.dart";
+import 'package:cha_casa_nova/pix_page.dart';
 import 'package:cha_casa_nova/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'dart:js' as js;
-
 import 'package:responsive_grid/responsive_grid.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -39,68 +42,67 @@ class _MyHomePageState extends State<MyHomePage> {
     var size = MediaQuery.of(context).size;
     final double height = size.height / 2;
     final double itemWidth = size.width / 2;
+    final bool isPc = size.width >= 1100;
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            toolbarHeight: height / 2,
-            title: Text(widget.title),
-            flexibleSpace: Image.network(
-              'https://cdn.pixabay.com/photo/2016/07/07/16/46/dice-1502706_640.jpg',
-              fit: BoxFit.fitWidth,
-            ),
-            centerTitle: true,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.person),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const AddProduto(title: 'Adicionar produto'),
-                    ),
-                  );
-                },
-              ),
-            ]),
-        body: SafeArea(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.2),
-            child: ResponsiveGridList(
-                desiredItemWidth: itemWidth > 600 ? 500 : 200,
-                minSpacing: 50,
-                children: produtos
-                    .map(
-                      (p) => InkWell(
-                          onTap: () {
-                            js.context.callMethod('open', [p.link]);
-                          },
-                          child: ProductCard(produto: p, width: itemWidth)),
-                    )
-                    .toList()),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          toolbarHeight: height,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage("assets/background.png"),
+              fit: BoxFit.cover,
+            )),
+            child: isPc ? HomePagePc() : HomePageMobile(),
           ),
-          // child: GridView.builder(
-          //     itemCount: produtos.length,
-          //     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          //       maxCrossAxisExtent: itemWidth,
-          //       crossAxisSpacing: 20,
-          //       childAspectRatio: 0.7,
-          //     ),
-          //     itemBuilder: (context, index) {
-          //       Produto produto = produtos[index];
-          //       return InkWell(
-          //         onTap: () {
-          //           js.context.callMethod('open', [produto.link]);
-          //         },
-          //         child: ProductCard(produto: produto),
-          //       );
-          //     }),
+        ),
+        body: SafeArea(
+          child: Container(
+            color: Color.fromARGB(255,255, 249, 242),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.2),
+              child: ResponsiveGridList(
+                  desiredItemWidth: itemWidth > 600 ? 500 : 200,
+                  minSpacing: 50,
+                  children: produtos
+                      .map(
+                        (p) => InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text(
+                                      'Qual será a forma de presentear?'),
+                                  actions: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () => js.context
+                                              .callMethod('open', [p.link]),
+                                          child: const Text("Loja"),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () => Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (context) => PixPage(
+                                                      preco: p.preco,
+                                                      descricao: p.nome))),
+                                          child: const Text("Pix"),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: ProductCard(produto: p, width: itemWidth)),
+                      )
+                      .toList()),
+            ),
+          ),
         ));
   }
 

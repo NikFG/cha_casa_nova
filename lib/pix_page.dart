@@ -3,8 +3,7 @@ import 'package:pix_flutter/pix_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class PixPage extends StatefulWidget {
-  const PixPage(
-      {super.key, required double this.preco, required String this.descricao});
+  const PixPage({super.key, required this.preco, required this.descricao});
 
   final double preco;
 
@@ -51,7 +50,7 @@ class _PixPageState extends State<PixPage> {
                       mostraQrCode = true;
                     });
                   },
-                  child: Text("Ok"))
+                  child: const Text("Ok"))
             ],
           )),
     );
@@ -60,15 +59,13 @@ class _PixPageState extends State<PixPage> {
   String _geraQrCodePix() {
     PixFlutter pixFlutter = PixFlutter(
         payload: Payload(
-            pixKey: '+5537998456938',
-            merchantName:
-            'NikollasFerreiraGoncal',
-            merchantCity: 'Brasilia',
-            amount: widget.preco.toStringAsFixed(2)));
+      pixKey: '5faa8df4-7404-4e89-9622-64cbe0478623',
+      merchantName: 'NikollasFerreiraGoncal',
+      merchantCity: 'Brasilia',
+      amount: widget.preco.toStringAsFixed(2),
+    ));
 
     String qrCode = pixFlutter.getQRCode();
-    print(qrCode);
     return qrCode;
-    // return "00020126360014br.gov.bcb.pix0114+553799845693852040000530398654040.015802BR5922NikollasFerreiraGoncal6008Brasilia620063049596";
   }
 }
