@@ -137,6 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Query<Map<String, dynamic>> queryProdutos() {
     return db
         .collection("produtos")
+        .where('comprado', isEqualTo: false)
         .orderBy('comprado')
         .orderBy('preco', descending: true);
   }

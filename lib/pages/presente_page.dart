@@ -20,6 +20,7 @@ class PresentePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore db = FirebaseFirestore.instance;
+    final mensagemController = TextEditingController();
     // importar planilha para csv
     return Scaffold(
       appBar: AppBar(
@@ -85,9 +86,9 @@ class PresentePage extends StatelessWidget {
                         IconButton(
                           onPressed: () => {
                             Clipboard.setData(ClipboardData(text: pix!)).then(
-                                    (value) => ScaffoldMessenger.of(context)
+                                (value) => ScaffoldMessenger.of(context)
                                     .showSnackBar(
-                                    SnackBar(content: Text("Pix copiado"))))
+                                        SnackBar(content: Text("Pix copiado"))))
                           },
                           icon: Icon(Icons.copy),
                         ),
@@ -127,6 +128,7 @@ class PresentePage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 10),
                     width: MediaQuery.of(context).size.width / 2,
                     child: TextField(
+                      controller: mensagemController,
                       maxLines: 5,
                       decoration: InputDecoration(
                         hintText: "Escreva aqui",
@@ -145,7 +147,11 @@ class PresentePage extends StatelessWidget {
                       db
                           .collection("produtos")
                           .doc(idProduto)
-                          .set({"comprado": true});
+                          .update({"comprado": true});
+                      db.collection("mensagem").doc(idProduto).set({
+                        "mensagem": mensagemController.text,
+                        "produto": descricaoProduto
+                      });
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => MyHomePage(),
                       ));
