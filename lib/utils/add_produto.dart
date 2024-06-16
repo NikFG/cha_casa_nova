@@ -42,7 +42,7 @@ class _AddProdutoState extends State<AddProduto> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) =>
-                          const MyHomePage(title: 'Chá de casa nova NikolLaís'),
+                          const MyHomePage(),
                     ),
                   );
                 },

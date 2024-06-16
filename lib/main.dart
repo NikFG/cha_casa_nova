@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "BlackMango",
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Chá de casa nova NikolLaís'),
+      home: const MyHomePage(),
     );
   }
 }

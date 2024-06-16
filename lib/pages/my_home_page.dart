@@ -3,17 +3,15 @@ import 'dart:js' as js;
 import 'package:cha_casa_nova/model/Produto.dart';
 import "package:cha_casa_nova/pages/home_page_mobile.dart";
 import "package:cha_casa_nova/pages/home_page_pc.dart";
-import 'package:cha_casa_nova/pages/pix_page.dart';
 import 'package:cha_casa_nova/pages/presente_page.dart';
 import 'package:cha_casa_nova/widgets/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pix_flutter/pix_flutter.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -44,11 +42,6 @@ class _MyHomePageState extends State<MyHomePage> {
     final double itemWidth = size.width / 2;
     final bool isPc = size.width >= 1100;
     return Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        //   toolbarHeight: height,
-        //   flexibleSpace: ,
-        // ),
         body: SafeArea(
       child: ListView(
         children: [
@@ -72,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   minSpacing: 50,
                   children: produtos
                       .map(
-                        (p) => InkWell(
+                        (Produto produto) => InkWell(
                             onTap: () {
                               showDialog(
                                 context: context,
@@ -86,21 +79,33 @@ class _MyHomePageState extends State<MyHomePage> {
                                       children: [
                                         ElevatedButton(
                                           onPressed: () {
-                                            js.context
-                                                .callMethod('open', [p.link]);
+                                            js.context.callMethod(
+                                                'open', [produto.link]);
+
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const PresentePage()));
+                                                        PresentePage(
+                                                          idProduto: produto.id,
+                                                          descricaoProduto:
+                                                              produto.nome,
+                                                        )));
                                           },
                                           child: const Text("Loja"),
                                         ),
                                         ElevatedButton(
-                                          onPressed: () => Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                                  builder: (context) => PixPage(
-                                                      preco: p.preco,
-                                                      descricao: p.nome))),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PresentePage(
+                                                      pix: _geraQrCodePix(
+                                                          produto.preco),
+                                                      idProduto: produto.id,
+                                                      descricaoProduto:
+                                                          produto.nome),
+                                            ));
+                                          },
                                           child: const Text("Pix"),
                                         ),
                                       ],
@@ -109,7 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               );
                             },
-                            child: ProductCard(produto: p, width: itemWidth)),
+                            child: ProductCard(
+                                produto: produto, width: itemWidth)),
                       )
                       .toList()),
             ),
@@ -133,5 +139,18 @@ class _MyHomePageState extends State<MyHomePage> {
         .collection("produtos")
         .orderBy('comprado')
         .orderBy('preco', descending: true);
+  }
+
+  String _geraQrCodePix(double preco) {
+    PixFlutter pixFlutter = PixFlutter(
+        payload: Payload(
+      pixKey: '5faa8df4-7404-4e89-9622-64cbe0478623',
+      merchantName: 'NikollasFerreiraGoncal',
+      merchantCity: 'Brasilia',
+      amount: preco.toStringAsFixed(2),
+    ));
+
+    String qrCode = pixFlutter.getQRCode();
+    return qrCode;
   }
 }
