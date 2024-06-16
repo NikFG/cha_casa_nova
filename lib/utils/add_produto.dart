@@ -1,10 +1,10 @@
-import 'package:cha_casa_nova/my_home_page.dart';
+import 'package:cha_casa_nova/pages/my_home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
-import 'Produto.dart';
+import '../model/Produto.dart';
 
 class AddProduto extends StatefulWidget {
   const AddProduto({super.key, required this.title});

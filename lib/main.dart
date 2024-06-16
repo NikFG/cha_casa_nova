@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'my_home_page.dart';
+import 'pages/my_home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'Chá de casa nova Nikollas + Laís',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        primaryColor: const Color.fromARGB(255, 112, 89, 83),
+        fontFamily: "BlackMango",
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Chá de casa nova NikolLaís'),

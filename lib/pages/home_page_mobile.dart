@@ -1,3 +1,4 @@
+import "package:cha_casa_nova/utils/constants.dart";
 import "package:flutter/material.dart";
 
 class HomePageMobile extends StatelessWidget {
@@ -8,45 +9,45 @@ class HomePageMobile extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
+        Text(
           "Chá de casa nova",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 30,
-            fontFamily: 'BlackMango',
+           
             fontWeight: FontWeight.w900,
-            color: Color.fromARGB(255, 219, 161, 145),
+            color: Constants.secondaryColor,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Text(
           "Laís e Nikollas",
           style: TextStyle(
             fontSize: 25,
-            fontFamily: 'BlackMango',
+           
             fontStyle: FontStyle.italic,
-            color: Color.fromARGB(255, 112, 89, 83),
+            color: Constants.primaryColor,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         Text(
           "01/07/2024",
           style: TextStyle(
             fontSize: 20,
-            fontFamily: 'BlackMango',
-            color: Color.fromARGB(255, 112, 89, 83),
+           
+            color:Constants.primaryColor,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        CircleAvatar(
+        const CircleAvatar(
           backgroundImage: AssetImage("assets/profile.png"),
-          radius: 100,
+          radius: 90,
         )
       ],
     );

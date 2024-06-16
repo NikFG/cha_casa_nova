@@ -1,11 +1,11 @@
-import "dart:io";
 import 'dart:js' as js;
 
-import 'package:cha_casa_nova/Produto.dart';
-import "package:cha_casa_nova/home_page_mobile.dart";
-import "package:cha_casa_nova/home_page_pc.dart";
-import 'package:cha_casa_nova/pix_page.dart';
-import 'package:cha_casa_nova/product_card.dart';
+import 'package:cha_casa_nova/model/Produto.dart';
+import "package:cha_casa_nova/pages/home_page_mobile.dart";
+import "package:cha_casa_nova/pages/home_page_pc.dart";
+import 'package:cha_casa_nova/pages/pix_page.dart';
+import 'package:cha_casa_nova/pages/presente_page.dart';
+import 'package:cha_casa_nova/widgets/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -44,25 +44,30 @@ class _MyHomePageState extends State<MyHomePage> {
     final double itemWidth = size.width / 2;
     final bool isPc = size.width >= 1100;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          toolbarHeight: height,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
+        // appBar: AppBar(
+        //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        //   toolbarHeight: height,
+        //   flexibleSpace: ,
+        // ),
+        body: SafeArea(
+      child: ListView(
+        children: [
+          Container(
+            height: height,
+            decoration: const BoxDecoration(
                 image: DecorationImage(
               image: AssetImage("assets/background.png"),
               fit: BoxFit.cover,
             )),
-            child: isPc ? HomePagePc() : HomePageMobile(),
+            child: isPc ? const HomePagePc() : const HomePageMobile(),
           ),
-        ),
-        body: SafeArea(
-          child: Container(
-            color: Color.fromARGB(255,255, 249, 242),
+          Container(
+            color: const Color.fromARGB(255, 255, 249, 242),
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.2),
               child: ResponsiveGridList(
+                  shrinkWrap: true,
                   desiredItemWidth: itemWidth > 600 ? 500 : 200,
                   minSpacing: 50,
                   children: produtos
@@ -80,8 +85,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () => js.context
-                                              .callMethod('open', [p.link]),
+                                          onPressed: () {
+                                            js.context
+                                                .callMethod('open', [p.link]);
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const PresentePage()));
+                                          },
                                           child: const Text("Loja"),
                                         ),
                                         ElevatedButton(
@@ -103,7 +114,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       .toList()),
             ),
           ),
-        ));
+        ],
+      ),
+    ));
   }
 
   void refresh() async {

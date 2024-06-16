@@ -1,8 +1,8 @@
-import 'package:cha_casa_nova/pix_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'Produto.dart';
+import '../model/Produto.dart';
+import '../utils/constants.dart';
 
 class ProductCard extends StatefulWidget {
   const ProductCard({
@@ -29,7 +29,7 @@ class _ProductCardState extends State<ProductCard> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 219, 161, 145).withOpacity(0.1),
+              color: Constants.secondaryColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Image.network(
@@ -42,18 +42,15 @@ class _ProductCardState extends State<ProductCard> {
           const SizedBox(height: 8),
           Text(
             widget.produto.nome,
-            style: TextStyle(
-              fontSize: 30,
-              color: Color.fromARGB(255, 112, 89, 83)
-            ),
+            style: TextStyle(fontSize: 30, color: Constants.primaryColor),
             maxLines: 2,
           ),
           Text(
             formatNumber(widget.produto.preco),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w600,
-              color: Color.fromARGB(255, 219, 161, 145),
+              color: Constants.secondaryColor,
             ),
           )
         ],
