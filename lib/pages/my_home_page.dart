@@ -100,7 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                               builder: (context) =>
                                                   PresentePage(
                                                       pix: _geraQrCodePix(
-                                                          produto.preco),
+                                                          produto.preco,
+                                                          produto.id),
                                                       idProduto: produto.id,
                                                       descricaoProduto:
                                                           produto.nome),
@@ -141,17 +142,17 @@ class _MyHomePageState extends State<MyHomePage> {
         .orderBy('comprado')
         .orderBy('preco', descending: true);
   }
+}
 
-  String _geraQrCodePix(double preco) {
-    PixFlutter pixFlutter = PixFlutter(
-        payload: Payload(
-      pixKey: '5faa8df4-7404-4e89-9622-64cbe0478623',
-      merchantName: 'NikollasFerreiraGoncal',
-      merchantCity: 'Brasilia',
+String _geraQrCodePix(double preco, String idProduto) {
+  PixFlutter pixFlutter = PixFlutter(
+    payload: Payload(
       amount: preco.toStringAsFixed(2),
-    ));
-
-    String qrCode = pixFlutter.getQRCode();
-    return qrCode;
-  }
+      pixKey: "+5537998456938",
+      merchantCity: "Brasilia",
+      txid: idProduto.split('-')[0],
+      merchantName: "Nikollas",
+    ),
+  );
+  return pixFlutter.getQRCode();
 }
