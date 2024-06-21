@@ -101,67 +101,87 @@ class PresentePage extends StatelessWidget {
                     height: 0,
                   ),
             Center(
-              child: Column(
-                children: const [
-                  Text(
-                    "Muito obrigado por contribuir com a nossa nova casa!",
-                    style: TextStyle(fontSize: 25, fontFamily: "Forum"),
-                  ),
-                  Text(
-                    "Esperamos você no dia 01/07/2024 às 24:99 horas para festejar conosco!",
-                    style: TextStyle(fontSize: 25, fontFamily: "Forum"),
-                  ),
-                ],
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  children: [
+                    Text(
+                      "Muito obrigado por contribuir com a nossa nova casa!",
+                      style: TextStyle(fontSize: 25, fontFamily: "Forum"),
+                    ),
+                    FutureBuilder(
+                      future: db
+                          .collection("horario")
+                          .doc("irgHtBu9UDpmgCfK0kwE")
+                          .get(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return SizedBox(
+                            width: 0,
+                            height: 0,
+                          );
+                        }
+                        return Text(
+                          "Esperamos você no dia ${snapshot.data?["data"]} às ${snapshot.data?["hora"]} horas para festejar conosco!",
+                          style: TextStyle(fontSize: 25, fontFamily: "Forum"),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(
               height: 20,
             ),
             Center(
-              child: Column(
-                children: [
-                  Text(
-                    "Deixe uma mensagem abaixo para Laís e Nikollas:",
-                    style: TextStyle(fontSize: 25, fontFamily: "Forum"),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: TextField(
-                      controller: mensagemController,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        hintText: "Escreva aqui",
-                        contentPadding: EdgeInsets.all(20),
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      textAlign: TextAlign.justify,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  children: [
+                    Text(
+                      "Deixe uma mensagem abaixo para Laís e Nikollas:",
+                      style: TextStyle(fontSize: 25, fontFamily: "Forum"),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      db
-                          .collection("produtos")
-                          .doc(idProduto)
-                          .update({"comprado": true});
-                      db.collection("mensagem").doc(idProduto).set({
-                        "mensagem": mensagemController.text,
-                        "produto": descricaoProduto
-                      });
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MyHomePage(),
-                      ));
-                    },
-                    child: Text("Enviar",
-                        style: TextStyle(
-                          fontSize: 20,
-                        )),
-                  ),
-                ],
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      width: MediaQuery.of(context).size.width - 60,
+                      child: TextField(
+                        controller: mensagemController,
+                        maxLines: 5,
+                        decoration: InputDecoration(
+                          hintText: "Escreva aqui",
+                          contentPadding: EdgeInsets.all(20),
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        db
+                            .collection("produtos")
+                            .doc(idProduto)
+                            .update({"comprado": true});
+                        db.collection("mensagem").doc(idProduto).set({
+                          "mensagem": mensagemController.text,
+                          "produto": descricaoProduto
+                        });
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MyHomePage(),
+                        ));
+                      },
+                      child: Text("Enviar",
+                          style: TextStyle(
+                            fontSize: 20,
+                          )),
+                    ),
+                  ],
+                ),
               ),
             )
           ],

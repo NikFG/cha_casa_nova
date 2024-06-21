@@ -142,17 +142,18 @@ class _MyHomePageState extends State<MyHomePage> {
         .orderBy('comprado')
         .orderBy('preco', descending: true);
   }
+  String _geraQrCodePix(double preco, String idProduto) {
+    PixFlutter pixFlutter = PixFlutter(
+      payload: Payload(
+        amount: preco.toStringAsFixed(2),
+        pixKey: "+5537998456938",
+        merchantCity: "Brasilia",
+        txid: idProduto.split('-')[0],
+        merchantName: "Nikollas",
+      ),
+    );
+    return pixFlutter.getQRCode();
+  }
 }
 
-String _geraQrCodePix(double preco, String idProduto) {
-  PixFlutter pixFlutter = PixFlutter(
-    payload: Payload(
-      amount: preco.toStringAsFixed(2),
-      pixKey: "+5537998456938",
-      merchantCity: "Brasilia",
-      txid: idProduto.split('-')[0],
-      merchantName: "Nikollas",
-    ),
-  );
-  return pixFlutter.getQRCode();
-}
+

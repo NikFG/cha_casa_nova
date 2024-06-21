@@ -1,4 +1,5 @@
 import "package:cha_casa_nova/utils/constants.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 
 class HomePagePc extends StatelessWidget {
@@ -6,6 +7,7 @@ class HomePagePc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore db = FirebaseFirestore.instance;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -34,12 +36,24 @@ class HomePagePc extends StatelessWidget {
             const SizedBox(
               height: 70,
             ),
-            Text(
-              "01/07/2024",
-              style: TextStyle(
-                fontSize: 40,
-                color: Constants.primaryColor,
-              ),
+            FutureBuilder(
+              future:
+                  db.collection("horario").doc("irgHtBu9UDpmgCfK0kwE").get(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return SizedBox(
+                    width: 0,
+                    height: 0,
+                  );
+                }
+                return Text(
+                  snapshot.data?["data"],
+                  style: TextStyle(
+                    fontSize: 40,
+                    color: Constants.primaryColor,
+                  ),
+                );
+              },
             ),
           ],
         ),
