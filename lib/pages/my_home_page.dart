@@ -22,20 +22,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   FirebaseFirestore db = FirebaseFirestore.instance;
-  List<Produto> produtos = [];
   List<Categoria> categorias = [];
 
   @override
   void initState() {
     refresh();
-    /*queryProdutos().snapshots().listen((event) {
-      produtos = [];
-      setState(() {
-        for (QueryDocumentSnapshot doc in event.docs) {
-          produtos.add(Produto.fromJson(doc));
-        }
-      });
-    });*/
+    queryCategorias().snapshots().listen((event) {
+      for (QueryDocumentSnapshot doc in event.docs) {
+        queryProdutos(doc.id).snapshots().listen((event) {
+          Categoria categoria = categorias.where((cat) {
+            return cat.id == doc.id;
+          }).first;
+          setState(() {
+            categoria.produtos =
+                event.docs.map((prod) => Produto.fromJson(prod)).toList();
+          });
+        });
+      }
+    });
     // _convertCsv();
     super.initState();
   }
@@ -43,7 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemWidth = size.width / 2;
     final double height = size.height / 2;
     final bool isPc = size.width >= 1100;
     return Scaffold(
@@ -66,25 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void refresh() async {
-    try {
-      QuerySnapshot query = await db.collection("categorias").get();
-    print(query.docs);
-      for (var doc in query.docs) {
-        String idCategoria = doc.id;
-        QuerySnapshot productsSnapshot = await db
-            .collection('categorias')
-            .doc(idCategoria)
-            .collection('produtos')
-            .get();
+    QuerySnapshot query = await db.collection("categorias").get();
+    for (var doc in query.docs) {
+      QuerySnapshot productsSnapshot = await queryProdutos(doc.id).get();
+      setState(() {
         List<Produto> produtos =
             productsSnapshot.docs.map((doc) => Produto.fromJson(doc)).toList();
-        setState(() {
-          categorias.add(Categoria.fromJson(doc, produtos));
-        });
-        print(categorias);
-      }
-    } catch (ex) {
-      print(ex);
+        categorias.add(Categoria.fromJson(doc, produtos));
+      });
     }
   }
 
@@ -94,7 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
         .doc(categoriaId)
         .collection("produtos")
         .where('comprado', isEqualTo: false)
-        .orderBy('comprado')
         .orderBy('preco', descending: true);
   }
 
@@ -160,6 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 shrinkWrap: true,
                 desiredItemWidth: itemWidth > 600 ? 500 : 200,
                 minSpacing: 50,
+                physics: NeverScrollableScrollPhysics(),
                 children: produtos
                     .map(
                       (Produto produto) => InkWell(
