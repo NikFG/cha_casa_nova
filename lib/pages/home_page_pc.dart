@@ -56,6 +56,7 @@ class HomePagePc extends StatelessWidget {
               },
             ),
           ],
+
         ),
         const CircleAvatar(
           backgroundImage: AssetImage("assets/profile.png"),

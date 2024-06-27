@@ -7,11 +7,11 @@ import "package:cha_casa_nova/pages/home_page_pc.dart";
 import 'package:cha_casa_nova/pages/presente_page.dart';
 import 'package:cha_casa_nova/widgets/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:pix_flutter/pix_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:csv/csv.dart';
-import 'package:uuid/uuid.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -62,7 +62,49 @@ class _MyHomePageState extends State<MyHomePage> {
             )),
             child: isPc ? const HomePagePc() : const HomePageMobile(),
           ),
+          Container(
+            color: const Color.fromARGB(255, 255, 249, 242),
+            child: Center(
+              child: Text(
+                "Sugestão\nde\nPresentes",
+                style: TextStyle(
+                  fontSize: 45,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
           ..._getProdutos(size),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            color: const Color.fromARGB(255, 255, 249, 242),
+            child: Column(
+              children: [
+                Text(
+                  "Qualquer quantia pode nos ajudar e somos gratos pela sua presença!",
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Caso seja de sua vontade, deixamos um pix abaixo.",
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                QrImageView(
+                  data: _geraQrCodePixSemPreco("NoPrice"),
+                  size: 200,
+                ),
+              ],
+            ),
+          )
         ],
       ),
     ));
@@ -106,6 +148,18 @@ class _MyHomePageState extends State<MyHomePage> {
     return pixFlutter.getQRCode();
   }
 
+  String _geraQrCodePixSemPreco(String idProduto) {
+    PixFlutter pixFlutter = PixFlutter(
+      payload: Payload(
+        pixKey: "+5537998456938",
+        merchantCity: "Brasilia",
+        txid: idProduto.split('-')[0],
+        merchantName: "Nikollas",
+      ),
+    );
+    return pixFlutter.getQRCode();
+  }
+
   _convertCsv() async {
     try {
       var file = await DefaultAssetBundle.of(context).loadString(
@@ -114,7 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
       List<List<dynamic>> results =
           const CsvToListConverter().convert(file, fieldDelimiter: ";");
       for (var result in results) {
-        var uuid = Uuid();
         await db
             .collection("categorias")
             .doc(result[0])
@@ -144,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
         color: const Color.fromARGB(255, 255, 249, 242),
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.2),
         child: ExpansionTile(
-          title: Text(categoria.id),
+          title: Text("${categoria.id} (${categoria.produtos.length})"),
           initiallyExpanded: true,
           children: [
             ResponsiveGridList(
