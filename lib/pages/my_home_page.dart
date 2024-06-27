@@ -9,6 +9,7 @@ import 'package:cha_casa_nova/widgets/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pix_flutter/pix_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -49,6 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
     var size = MediaQuery.of(context).size;
     final double height = size.height / 2;
     final bool isPc = size.width >= 1100;
+    const String pix =
+        "00020126360014br.gov.bcb.pix0114+55379984569385204000053039865802BR5924Nikollas Ferreira Goncal6008Brasilia62090505n5gai630446D9";
     return Scaffold(
         body: SafeArea(
       child: ListView(
@@ -68,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text(
                 "Sugestão\nde\nPresentes",
                 style: TextStyle(
-                  fontSize: 45,
+                  fontSize: 30,
                   fontStyle: FontStyle.italic,
                   color: Colors.black87,
                 ),
@@ -99,8 +102,27 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 10,
                 ),
                 QrImageView(
-                  data: _geraQrCodePixSemPreco("NoPrice"),
+                  data: pix,
                   size: 200,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  child: SelectableText(
+                    pix,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontFamily: "Forum",
+                    ),
+                    maxLines: null,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => {
+                    Clipboard.setData(ClipboardData(text: pix)).then((value) =>
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Pix copiado"))))
+                  },
+                  icon: Icon(Icons.copy),
                 ),
               ],
             ),
