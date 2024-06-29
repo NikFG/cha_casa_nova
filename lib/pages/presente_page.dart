@@ -10,11 +10,13 @@ class PresentePage extends StatelessWidget {
     super.key,
     required this.idProduto,
     required this.descricaoProduto,
+    required this.idCategoria,
     this.pix,
   });
 
   final String idProduto;
   final String descricaoProduto;
+  final String idCategoria;
   final String? pix;
 
   @override
@@ -164,6 +166,8 @@ class PresentePage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         db
+                            .collection("categorias")
+                            .doc(idCategoria)
                             .collection("produtos")
                             .doc(idProduto)
                             .update({"comprado": true});
