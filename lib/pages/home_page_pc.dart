@@ -46,17 +46,27 @@ class HomePagePc extends StatelessWidget {
                     height: 0,
                   );
                 }
-                return Text(
-                  snapshot.data?["data"],
-                  style: TextStyle(
-                    fontSize: 40,
-                    color: Constants.primaryColor,
-                  ),
+                return Column(
+                  children: [
+                    Text(
+                      snapshot.data?["data"],
+                      style: TextStyle(
+                        fontSize: 40,
+                        color: Constants.primaryColor,
+                      ),
+                    ),
+                    Text(
+                      snapshot.data?["hora"],
+                      style: TextStyle(
+                        fontSize: 40,
+                        color: Constants.primaryColor,
+                      ),
+                    ),
+                  ],
                 );
               },
             ),
           ],
-
         ),
         const CircleAvatar(
           backgroundImage: AssetImage("assets/profile.png"),
