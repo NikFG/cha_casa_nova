@@ -28,23 +28,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     refresh();
-    try {
-      queryCategorias().snapshots().listen((event) {
-        for (QueryDocumentSnapshot doc in event.docs) {
-          queryProdutos(doc.id).snapshots().listen((event) {
-            Categoria categoria = categorias.where((cat) {
-              return cat.id == doc.id;
-            }).first;
-            setState(() {
-              categoria.produtos =
-                  event.docs.map((prod) => Produto.fromJson(prod)).toList();
-            });
+    queryCategorias().snapshots().listen((event) {
+      for (QueryDocumentSnapshot doc in event.docs) {
+        queryProdutos(doc.id).snapshots().listen((event) {
+          Categoria categoria = categorias.where((cat) {
+            return cat.id == doc.id;
+          }).first;
+          setState(() {
+            categoria.produtos =
+                event.docs.map((prod) => Produto.fromJson(prod)).toList();
           });
-        }
-      });
-    } catch (ex) {
-      print(ex);
-    }
+        });
+      }
+    });
     // _convertCsv();
     super.initState();
   }

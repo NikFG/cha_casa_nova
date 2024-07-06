@@ -1,6 +1,7 @@
 import "package:cha_casa_nova/utils/constants.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import "package:maps_launcher/maps_launcher.dart";
 
 class HomePageMobile extends StatelessWidget {
   const HomePageMobile({super.key});
@@ -61,6 +62,22 @@ class HomePageMobile extends StatelessWidget {
                     color: Constants.primaryColor,
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "RUA NICARÁGUA, 951, SANTA ROSA - DIVINÓPOLIS",
+                      style:
+                      TextStyle(color: Color.fromARGB(255, 112, 89, 83), fontSize: 15),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          MapsLauncher.launchQuery(
+                              'RUA NICARÁGUA, 951, SANTA ROSA - DIVINÓPOLIS');
+                        },
+                        icon: Icon(Icons.pin_drop))
+                  ],
+                )
               ],
             );
           },
