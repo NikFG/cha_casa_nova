@@ -17,7 +17,6 @@ class HomePageMobile extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 30,
-           
             fontWeight: FontWeight.w900,
             color: Constants.secondaryColor,
           ),
@@ -29,7 +28,6 @@ class HomePageMobile extends StatelessWidget {
           "Laís e Nikollas",
           style: TextStyle(
             fontSize: 25,
-           
             fontStyle: FontStyle.italic,
             color: Constants.primaryColor,
           ),
@@ -38,8 +36,7 @@ class HomePageMobile extends StatelessWidget {
           height: 15,
         ),
         FutureBuilder(
-          future:
-          db.collection("horario").doc("irgHtBu9UDpmgCfK0kwE").get(),
+          future: db.collection("horario").doc("irgHtBu9UDpmgCfK0kwE").get(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return SizedBox(
@@ -47,43 +44,58 @@ class HomePageMobile extends StatelessWidget {
                 height: 0,
               );
             }
-            return Column(
-              children: [
-                Text(
-                  snapshot.data?["data"],
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Constants.primaryColor,
+            return Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.calendar_month),
+                  SizedBox(
+                    width: 5,
                   ),
-                ), Text(
-                  snapshot.data?["hora"],
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Constants.primaryColor,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "RUA NICARÁGUA, 951, SANTA ROSA - DIVINÓPOLIS",
-                      style:
-                      TextStyle(color: Color.fromARGB(255, 112, 89, 83), fontSize: 15),
+                  Text(
+                    snapshot.data?["data"],
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Constants.primaryColor,
                     ),
-                    IconButton(
-                        onPressed: () {
-                          MapsLauncher.launchQuery(
-                              'RUA NICARÁGUA, 951, SANTA ROSA - DIVINÓPOLIS');
-                        },
-                        icon: Icon(Icons.pin_drop))
-                  ],
-                )
-              ],
-            );
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.watch_later_outlined),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    snapshot.data?["hora"],
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Constants.primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      MapsLauncher.launchQuery(
+                          'RUA NICARÁGUA, 951, SANTA ROSA - DIVINÓPOLIS');
+                    },
+                    icon: Icon(Icons.pin_drop),
+                  ),
+                  Text(
+                    "RUA NICARÁGUA, 951, SANTA ROSA - DIVINÓPOLIS",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 112, 89, 83), fontSize: 12),
+                  ),
+                ],
+              )
+            ]);
           },
-        ),
-        const SizedBox(
-          height: 10,
         ),
         const CircleAvatar(
           backgroundImage: AssetImage("assets/profile.png"),

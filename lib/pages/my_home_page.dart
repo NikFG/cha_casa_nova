@@ -48,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double height = size.height / 2;
     final bool isPc = size.width >= 1100;
     const String pix =
         "00020126360014br.gov.bcb.pix0114+55379984569385204000053039865802BR5924Nikollas Ferreira Goncal6008Brasilia62090505n5gai630446D9";
@@ -57,7 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
       child: ListView(
         children: [
           Container(
-            height: height,
             decoration: const BoxDecoration(
                 image: DecorationImage(
               image: AssetImage("assets/background.png"),
@@ -66,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: isPc ? const HomePagePc() : const HomePageMobile(),
           ),
           Container(
+            padding: EdgeInsets.only(top: 50),
             color: const Color.fromARGB(255, 255, 249, 242),
             child: Center(
               child: Text(
@@ -170,44 +169,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return pixFlutter.getQRCode();
   }
 
-  String _geraQrCodePixSemPreco(String idProduto) {
-    PixFlutter pixFlutter = PixFlutter(
-      payload: Payload(
-        pixKey: "+5537998456938",
-        merchantCity: "Brasilia",
-        txid: idProduto.split('-')[0],
-        merchantName: "Nikollas",
-      ),
-    );
-    return pixFlutter.getQRCode();
-  }
-
   _convertCsv() async {
-    try {
-      var file = await DefaultAssetBundle.of(context).loadString(
-        "assets/data.csv",
-      );
-      List<List<dynamic>> results =
-          const CsvToListConverter().convert(file, fieldDelimiter: ";");
-      for (var result in results) {
-        await db
-            .collection("categorias")
-            .doc(result[0])
-            .collection("produtos")
-            .add({
-          "nome": result[1],
-          "comprado": false,
-          "imagem": result[8],
-          "link": result[7],
-          "preco": result[2],
-        });
-      }
-    } catch (ex) {
-      print(ex);
+    var file = await DefaultAssetBundle.of(context).loadString(
+      "assets/data.csv",
+    );
+    List<List<dynamic>> results =
+        const CsvToListConverter().convert(file, fieldDelimiter: ";");
+    for (var result in results) {
+      await db
+          .collection("categorias")
+          .doc(result[0])
+          .collection("produtos")
+          .add({
+        "nome": result[1],
+        "comprado": false,
+        "imagem": result[8],
+        "link": result[7],
+        "preco": result[2],
+      });
     }
-    // result.forEach((r)=>{
-    // db.collection("categoria").doc();
-    // });
   }
 
   List<Widget> _getProdutos(Size size) {
