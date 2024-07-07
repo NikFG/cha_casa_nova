@@ -22,8 +22,7 @@ class PresentePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    final mensagemController = TextEditingController();
-    // importar planilha para csv
+    String mensagem = "";
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -149,8 +148,11 @@ class PresentePage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 10),
                       width: MediaQuery.of(context).size.width - 60,
                       child: TextField(
-                        controller: mensagemController,
                         maxLines: 5,
+                        keyboardType: TextInputType.text,
+                        onChanged: (text){
+                          mensagem = text;
+                        },
                         decoration: InputDecoration(
                           hintText: "Escreva aqui",
                           contentPadding: EdgeInsets.all(20),
@@ -172,7 +174,7 @@ class PresentePage extends StatelessWidget {
                             .doc(idProduto)
                             .update({"comprado": true});
                         db.collection("mensagem").doc(idProduto).set({
-                          "mensagem": mensagemController.text,
+                          "mensagem": mensagem,
                           "produto": descricaoProduto
                         });
                         Navigator.of(context).push(MaterialPageRoute(
