@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: const Color.fromARGB(255, 255, 249, 242),
             child: Center(
               child: Text(
-                "Sugestão\nde\nPresentes",
+                "Sugestão\nde\nPresentes\n\nClique no produto para comprar",
                 style: TextStyle(
                   fontSize: 30,
                   fontStyle: FontStyle.italic,
